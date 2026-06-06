@@ -12,6 +12,18 @@ describe('Death Alliance safe ARG portal', () => {
     expect(screen.getByText(/fictional \/ ARG \/ roleplay only/i)).toBeInTheDocument();
   });
 
+  it('renders the CloudScope-style dark operations layout', () => {
+    render(<App />);
+
+    expect(screen.getByRole('navigation', { name: /death alliance sections/i })).toBeInTheDocument();
+    expect(screen.getByText(/daemon net/i)).toBeInTheDocument();
+    expect(screen.getByText(/public archive distribution system/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/cinematic death alliance background loop/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /submit fictional clue/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /track archive status/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
+  });
+
   it('blocks draft generation until fictional consent and safe minimum fields are present', async () => {
     const user = userEvent.setup();
     render(<App />);
