@@ -1,0 +1,21 @@
+{
+  "case_id": "DA-000184",
+  "evidence_items": [
+    {
+      "evidence_id": "EV-0001",
+      "type": "supporting",
+      "summary": "Cleaned fictional document supporting the claim timeline.",
+      "metadata_cleaned": true,
+      "upvotes": 30,
+      "downvotes": 4
+    },
+    {
+      "evidence_id": "EV-0002",
+      "type": "counter_evidence",
+      "summary": "Cleaned fictional counter-evidence challenging the timeline.",
+      "metadata_cleaned": true,
+      "upvotes": 12,
+      "downvotes": 3
+    }
+  ]
+}

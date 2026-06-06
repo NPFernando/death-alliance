@@ -1,0 +1,7 @@
+Package hash: sha256-demo-9fb20b2c5ac7f4b4a9b4a5a7d4ef7a17d0f4fdemo
+Project public key ID: DA-DEMO-KEY-01
+Created timestamp: 2026-06-06T00:03:00Z
+Archive version: v4-demo
+Signature value: demo-signature-not-cryptographic
+
+This is a static example signature for documentation and UI development only.

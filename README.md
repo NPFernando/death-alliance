@@ -8,7 +8,8 @@ Important: this project is for fictional, anonymized, roleplay, ARG, and creativ
 
 ## What is implemented
 
-- Hash-routed GitHub Pages deployment with separate Home, Submit, Archive, Manifest, Rules, and Status pages.
+- Hash-routed GitHub Pages deployment with separate Home, Submit, Archive, Manifest, Architecture, Rules, and Status pages.
+- Visible demo-mode banner that links to the architecture boundary page.
 - Cinematic black landing page with animated Grim Reaper / Death silhouette, halo, fog, and typewriter-style copy.
 - Safe fictional case-type gate.
 - Anonymous identity model UI using anonymous name + hidden key warning.
@@ -55,6 +56,7 @@ Useful routes:
 - `#/submit`
 - `#/archive`
 - `#/manifest`
+- `#/architecture`
 - `#/rules`
 - `#/health`
 
@@ -66,6 +68,17 @@ Developer reference docs:
 - [Developer Guide](docs/developer-guide.md) — setup, routes, validation, deployment, testing expectations.
 - [Media Assets Guide](docs/media-assets.md) — clean media replacement flow, watermark policy, optimization guidance.
 - [Safety and Content Policy](docs/safety-and-content-policy.md) — fictional-only safety rules, upload processing, metadata/reporting policy.
+
+## Example archive artifacts
+
+Static demo examples for backend/API developers:
+
+- `examples/case-package/DA-000184-v1/` — concrete signed case-package shape.
+- `examples/archive/death-alliance-manifest.json` — demo signed manifest shape.
+- `examples/archive/index.json` — demo static archive index.
+- `examples/archive/public-key.txt` — placeholder public key format.
+
+These files are documentation/demo artifacts only. They are not cryptographic production outputs.
 
 ## Local setup
 

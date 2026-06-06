@@ -1,0 +1,4 @@
+-----BEGIN DEATH ALLIANCE DEMO PUBLIC KEY-----
+DA-DEMO-KEY-01
+This is a documentation-only placeholder key. Do not use it for production signing.
+-----END DEATH ALLIANCE DEMO PUBLIC KEY-----

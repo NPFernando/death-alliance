@@ -36,12 +36,13 @@ This URL is a static demo / portfolio preview only, not a production deployment.
 The app uses hash routes so it works on GitHub Pages without server rewrite rules.
 
 ```text
-#/home       Cinematic landing page
-#/submit     Fictional clue submission form
-#/archive    Example reports and archive table
-#/manifest   Publishing/manifest concept
-#/rules      Fictional content and safety rules
-#/health     Archive health concept
+#/home          Cinematic landing page
+#/submit        Fictional clue submission form
+#/archive       Example reports and archive table
+#/manifest      Publishing/manifest concept
+#/architecture  Demo boundary and V4 architecture page
+#/rules         Fictional content and safety rules
+#/health        Archive health concept
 ```
 
 Route logic lives in `src/App.tsx`:
@@ -61,6 +62,9 @@ src/App.css                          Cinematic styles and page layouts
 src/safety.ts                        Content modes, categories, statuses, text guard
 src/App.test.tsx                     UI/safety regression tests
 scripts/safety-check.mjs             Static safety check
+examples/case-package/DA-000184-v1   Demo signed case-package shape
+examples/archive                     Demo archive manifest, index, and public key
+
 docs/architecture.md                 Final V4 architecture reference
 docs/developer-guide.md              This guide
 docs/media-assets.md                 Media asset policy and replacement flow

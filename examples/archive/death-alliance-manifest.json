@@ -1,0 +1,11 @@
+{
+  "project": "Death Alliance",
+  "version": "4.0-demo",
+  "latest_archive_version": "v4-demo",
+  "latest_archive_cid": "bafy-demo-root-cid",
+  "latest_torrent": "DeathAlliance-Archive-v4-demo.torrent",
+  "published_at": "2026-06-06T00:00:00Z",
+  "public_key_id": "DA-DEMO-KEY-01",
+  "signature": "demo-manifest-signature-not-cryptographic",
+  "demo_only": true
+}

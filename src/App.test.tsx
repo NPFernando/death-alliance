@@ -97,6 +97,10 @@ describe('Death Alliance safe ARG portal', () => {
     await user.click(within(nav).getByRole('link', { name: /manifest/i }));
     expect(await screen.findByRole('heading', { name: /cleaned archive flow/i })).toBeInTheDocument();
 
+    await user.click(within(nav).getByRole('link', { name: /architecture/i }));
+    expect(await screen.findByRole('heading', { name: /static demo only/i })).toBeInTheDocument();
+    expect(screen.getByText(/cleaned package pipeline/i)).toBeInTheDocument();
+
     await user.click(within(nav).getByRole('link', { name: /rules/i }));
     expect(await screen.findByRole('heading', { name: /safety boundary/i })).toBeInTheDocument();
 
@@ -110,6 +114,17 @@ describe('Death Alliance safe ARG portal', () => {
 
     expect(screen.getByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: /welcome to the death alliance/i })).not.toBeInTheDocument();
+  });
+
+  it('shows a visible demo-mode banner that links to the architecture page', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const demoBadge = screen.getByRole('link', { name: /static demo mode details/i });
+    expect(demoBadge).toHaveTextContent(/demo only/i);
+
+    await user.click(demoBadge);
+    expect(await screen.findByRole('heading', { name: /static demo only/i })).toBeInTheDocument();
   });
 
   it('renders the CloudScope-style dark operations shell around routed pages', () => {

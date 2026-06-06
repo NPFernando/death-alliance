@@ -1,0 +1,20 @@
+{
+  "case_id": "DA-000184",
+  "comments_included": 2,
+  "top_comments": [
+    {
+      "anonymous_name": "GreyCrow",
+      "type": "supporting_evidence",
+      "summary": "Adds fictional timeline context supporting the technology theft story arc.",
+      "upvotes": 18,
+      "downvotes": 2
+    },
+    {
+      "anonymous_name": "SilentBell",
+      "type": "challenge",
+      "summary": "Questions whether the fictional evidence is strong enough for archive credibility.",
+      "upvotes": 11,
+      "downvotes": 1
+    }
+  ]
+}

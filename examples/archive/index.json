@@ -1,0 +1,15 @@
+{
+  "archive_version": "v4-demo",
+  "generated_at": "2026-06-06T00:00:00Z",
+  "demo_only": true,
+  "cases": [
+    {
+      "case_id": "DA-000184",
+      "version": "v1",
+      "title": "The Stolen Engine",
+      "package_path": "../case-package/DA-000184-v1/",
+      "cid": "bafy-demo-case-da-000184-v1",
+      "status": "Published"
+    }
+  ]
+}

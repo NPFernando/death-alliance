@@ -1,0 +1,16 @@
+{
+  "case_id": "DA-000184",
+  "version": "v1",
+  "anonymous_name": "Silent Witness",
+  "content_mode": "Fictional real-world-style accusation",
+  "title": "The Stolen Engine",
+  "category": "Technology Theft",
+  "description": "A fictional case about a betrayed inventor and a stolen engine inside a created story universe.",
+  "status": "Published",
+  "content_type": "fictional",
+  "created_at": "2026-06-06T00:00:00Z",
+  "distributed_storage": {
+    "ipfs_cid": "bafy-demo-case-da-000184-v1",
+    "torrent_snapshot": "DeathAlliance-Archive-v4-demo.torrent"
+  }
+}

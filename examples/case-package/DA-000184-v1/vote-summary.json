@@ -1,0 +1,19 @@
+{
+  "case_id": "DA-000184",
+  "case_votes": {
+    "upvotes": 120,
+    "downvotes": 14
+  },
+  "evidence_votes": {
+    "upvotes": 80,
+    "downvotes": 22
+  },
+  "comment_votes": {
+    "upvotes": 91,
+    "downvotes": 23
+  },
+  "dispute_votes": {
+    "supporting": 32,
+    "disputing": 9
+  }
+}

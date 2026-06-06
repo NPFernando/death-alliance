@@ -1,0 +1,14 @@
+{
+  "case_id": "DA-000184",
+  "files_processed": [
+    {
+      "file_name": "cleaned-blueprint-note-001.pdf",
+      "metadata_detected": true,
+      "metadata_removed": true,
+      "location_metadata_detected": false,
+      "location_metadata_removed": false,
+      "visible_private_data_detected": false,
+      "safe_to_publish": true
+    }
+  ]
+}
