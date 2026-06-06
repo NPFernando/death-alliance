@@ -48,6 +48,19 @@ npm run dev
 
 Open the Vite URL shown in the terminal.
 
+## Cinematic UI assets
+
+This project uses local decorative media assets committed with the app:
+
+- `vid/clip 1.mp4` — first-load cinematic intro/loading overlay.
+- `vid/clip 3.mp4` — subtle global background atmosphere behind the dashboard.
+- `vid/clip 5.mp4` — portal/media panel background loop.
+- `vid/clip 2.mp4` and `vid/clip 4.mp4` — reserved for future section transitions or alternate hero loops.
+- `img/ChatGPT Image Jun 6, 2026, 09_57_57 AM.png` — Grim Reaper hero artwork and video poster fallback.
+- `img/ui design.png` — visual reference mockup for the CloudScope-style dark dashboard layout.
+
+The videos are decorative only. The semantic content remains normal HTML text, the intro can be skipped/replayed, and the site must stay readable and usable if videos fail to load or reduced-motion preferences are enabled.
+
 ## Validation
 
 ```bash

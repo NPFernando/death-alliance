@@ -12,6 +12,30 @@ describe('Death Alliance safe ARG portal', () => {
     expect(screen.getByText(/fictional \/ ARG \/ roleplay only/i)).toBeInTheDocument();
   });
 
+  it('renders a skippable Clip 1 cinematic loading overlay before the archive UI', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
+    expect(screen.getByText(/initializing fictional archive/i)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /skip intro/i }));
+
+    expect(screen.queryByLabelText(/death alliance cinematic loading screen/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /welcome to the death alliance/i })).toBeInTheDocument();
+  });
+
+  it('can replay the cinematic intro from the top bar', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: /skip intro/i }));
+    expect(screen.queryByLabelText(/death alliance cinematic loading screen/i)).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: /replay intro/i }));
+    expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
+  });
+
   it('renders the CloudScope-style dark operations layout', () => {
     render(<App />);
 

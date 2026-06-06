@@ -1,10 +1,8 @@
 import {
   Archive,
   BadgeCheck,
-  CheckCircle2,
   Copy,
   Eye,
-  EyeOff,
   FileWarning,
   Fingerprint,
   Flag,
@@ -18,11 +16,12 @@ import {
   Swords,
   Vote,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { caseCategories, contentModes, createCaseId, isSubmissionTextSafe, publishingSteps } from './safety';
 
 const heroImage = new URL('../img/ChatGPT Image Jun 6, 2026, 09_57_57 AM.png', import.meta.url).href;
-const heroLoop = new URL('../vid/clip 4.mp4', import.meta.url).href;
+const introLoop = new URL('../vid/clip 1.mp4', import.meta.url).href;
+const heroLoop = new URL('../vid/clip 3.mp4', import.meta.url).href;
 const portalLoop = new URL('../vid/clip 5.mp4', import.meta.url).href;
 
 type DraftCase = {
@@ -59,8 +58,16 @@ const statusSteps = [
 ];
 
 function App() {
+  const [introVisible, setIntroVisible] = useState(true);
   const [draft, setDraft] = useState<DraftCase>(initialDraft);
   const [submittedCaseId, setSubmittedCaseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!introVisible) return undefined;
+
+    const timer = window.setTimeout(() => setIntroVisible(false), 5200);
+    return () => window.clearTimeout(timer);
+  }, [introVisible]);
 
   const hiddenKeyWarning = draft.hiddenKey.length > 0 && draft.hiddenKey.length < 12;
   const formSafe = useMemo(() => isSubmissionTextSafe(`${draft.title}\n${draft.description}`), [draft.title, draft.description]);
@@ -78,6 +85,33 @@ function App() {
 
   return (
     <main className="app-shell">
+      {introVisible && (
+        <section className="intro-loader" aria-label="Death Alliance cinematic loading screen">
+          <video
+            className="intro-video"
+            autoPlay
+            muted
+            playsInline
+            preload="auto"
+            poster={heroImage}
+            onError={() => setIntroVisible(false)}
+          >
+            <source src={introLoop} type="video/mp4" />
+            Your browser does not support decorative MP4 background video.
+          </video>
+          <div className="intro-shade" />
+          <div className="intro-copy">
+            <Skull size={54} />
+            <p className="terminal-kicker">Initializing fictional archive</p>
+            <h2>Death Alliance</h2>
+            <span>Metadata-safe archive console loading...</span>
+            <button type="button" className="ghost-button intro-skip" onClick={() => setIntroVisible(false)}>
+              Skip intro
+            </button>
+          </div>
+        </section>
+      )}
+
       <video
         aria-label="Cinematic Death Alliance background loop"
         className="bg-video"
@@ -88,6 +122,7 @@ function App() {
         poster={heroImage}
       >
         <source src={heroLoop} type="video/mp4" />
+        Your browser does not support decorative MP4 background video.
       </video>
       <div className="bg-grid" />
       <div className="red-vignette" />
@@ -130,7 +165,12 @@ function App() {
       <div className="main-stage" id="home">
         <header className="top-bar">
           <span>DAEMON NET // P2P ENABLED // ENCRYPTED</span>
-          <a className="join-button" href="#submit"><RadioTower size={15} /> Join the Alliance</a>
+          <div className="top-actions">
+            <button type="button" className="top-link-button" onClick={() => setIntroVisible(true)}>
+              Replay intro
+            </button>
+            <a className="join-button" href="#submit"><RadioTower size={15} /> Join the Alliance</a>
+          </div>
         </header>
 
         <section className="hero-console" aria-labelledby="hero-title">
@@ -281,6 +321,7 @@ function App() {
           <article className="portal-card video-card">
             <video className="portal-loop" autoPlay muted loop playsInline poster={heroImage}>
               <source src={portalLoop} type="video/mp4" />
+              Your browser does not support decorative MP4 background video.
             </video>
             <div>
               <p className="eyebrow">Archive ritual UI</p>
