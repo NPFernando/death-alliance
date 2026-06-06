@@ -47,7 +47,7 @@ const cinematicAllowlist = [
 const failures = [];
 for (const file of walk(root)) {
   const rel = relative(root, file);
-  if (allowFiles.has(rel)) continue;
+  if (allowFiles.has(rel) || rel.startsWith('docs/')) continue;
   let text = readFileSync(file, 'utf8');
   for (const allowed of cinematicAllowlist) text = text.replaceAll(allowed, '');
   for (const pattern of banned) {

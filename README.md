@@ -56,6 +56,15 @@ Useful routes:
 - `#/rules`
 - `#/health`
 
+## Documentation
+
+Developer reference docs:
+
+- [V4 Architecture](docs/architecture.md) — final layered architecture, publishing flow, backend responsibilities, package/manifest shapes.
+- [Developer Guide](docs/developer-guide.md) — setup, routes, validation, deployment, testing expectations.
+- [Media Assets Guide](docs/media-assets.md) — clean media replacement flow, watermark policy, optimization guidance.
+- [Safety and Content Policy](docs/safety-and-content-policy.md) — fictional-only safety rules, upload processing, metadata/reporting policy.
+
 ## Local setup
 
 ```bash
