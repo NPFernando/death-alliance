@@ -8,13 +8,13 @@ Important: this project is for fictional, anonymized, roleplay, ARG, and creativ
 
 ## What is implemented
 
-- Hash-routed GitHub Pages deployment with separate Home, Submit, Archive, Manifest, Architecture, Rules, and Status pages.
+- Hash-routed GitHub Pages deployment with separate Home, Submit, Archive, Manifest, Architecture, About, Rules, and Status pages.
 - Visible demo-mode banner that links to the architecture boundary page.
 - Cinematic black landing page with animated Grim Reaper / Death silhouette, halo, fog, and typewriter-style copy.
 - Safe fictional case-type gate.
 - Anonymous identity model UI using anonymous name + hidden key warning.
 - Fictional clue submission portal with consent gate.
-- Example fictional archive reports with upvotes, downvotes, comments, and evidence links.
+- Interactive fictional archive reports with working in-memory upvotes/downvotes, selected threads, connected evidence, and comment voting.
 - Metadata-safe publishing flow visualization.
 - Community dispute/voting/archive health mock dashboard.
 - Signed public archive distribution concept using IPFS/torrent-style snapshots as a public archive distribution system.
@@ -57,6 +57,7 @@ Useful routes:
 - `#/archive`
 - `#/manifest`
 - `#/architecture`
+- `#/about`
 - `#/rules`
 - `#/health`
 

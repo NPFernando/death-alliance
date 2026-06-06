@@ -41,6 +41,7 @@ The app uses hash routes so it works on GitHub Pages without server rewrite rule
 #/archive       Example reports and archive table
 #/manifest      Publishing/manifest concept
 #/architecture  Demo boundary and V4 architecture page
+#/about         App introduction and novel inspiration
 #/rules         Fictional content and safety rules
 #/health        Archive health concept
 ```

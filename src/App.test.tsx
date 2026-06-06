@@ -89,9 +89,10 @@ describe('Death Alliance safe ARG portal', () => {
 
     await user.click(within(nav).getByRole('link', { name: /archive/i }));
     expect(await screen.findByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /the crimson castle ledger/i })).toBeInTheDocument();
-    expect(screen.getByText(/248 upvotes/i)).toBeInTheDocument();
-    expect(screen.getByText(/counter-evidence diary note/i)).toBeInTheDocument();
+    const crimsonCard = screen.getByRole('article', { name: /the crimson castle ledger case card/i });
+    expect(within(crimsonCard).getByRole('heading', { name: /the crimson castle ledger/i })).toBeInTheDocument();
+    expect(within(crimsonCard).getByText(/248 upvotes/i)).toBeInTheDocument();
+    expect(within(crimsonCard).getByText(/counter-evidence diary note/i)).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: /safe draft case/i })).not.toBeInTheDocument();
 
     await user.click(within(nav).getByRole('link', { name: /manifest/i }));
@@ -101,11 +102,42 @@ describe('Death Alliance safe ARG portal', () => {
     expect(await screen.findByRole('heading', { name: /static demo only/i })).toBeInTheDocument();
     expect(screen.getByText(/cleaned package pipeline/i)).toBeInTheDocument();
 
+    await user.click(within(nav).getByRole('link', { name: /about/i }));
+    expect(await screen.findByRole('heading', { name: /about death alliance/i })).toBeInTheDocument();
+    expect(screen.getByText(/蒙冤入狱，重生后我大开杀戒/i)).toBeInTheDocument();
+
     await user.click(within(nav).getByRole('link', { name: /rules/i }));
     expect(await screen.findByRole('heading', { name: /safety boundary/i })).toBeInTheDocument();
 
     await user.click(within(nav).getByRole('link', { name: /status/i }));
     expect(await screen.findByRole('heading', { name: /latest signed manifest/i })).toBeInTheDocument();
+  });
+
+  it('opens archive threads and supports demo votes on cases and comments', async () => {
+    const user = userEvent.setup();
+    window.location.hash = '#/archive';
+    render(<App />);
+
+    const draculaCard = screen.getByRole('article', { name: /the crimson castle ledger case card/i });
+    expect(within(draculaCard).getByText(/248 upvotes/i)).toBeInTheDocument();
+
+    await user.click(within(draculaCard).getByRole('button', { name: /upvote the crimson castle ledger/i }));
+    expect(within(draculaCard).getByText(/249 upvotes/i)).toBeInTheDocument();
+
+    await user.click(within(draculaCard).getByRole('button', { name: /open thread for the crimson castle ledger/i }));
+    const thread = await screen.findByRole('region', { name: /selected case thread/i });
+    expect(within(thread).getByRole('heading', { name: /the crimson castle ledger/i })).toBeInTheDocument();
+    expect(within(thread).getByText(/cleaned castle map/i)).toBeInTheDocument();
+    expect(within(thread).getByText(/fictional timeline context/i)).toBeInTheDocument();
+    expect(within(thread).getByText(/thread status: heavily disputed/i)).toBeInTheDocument();
+
+    const firstComment = within(thread).getByRole('article', { name: /greycrow comment/i });
+    expect(within(firstComment).getByText(/18 upvotes/i)).toBeInTheDocument();
+    await user.click(within(firstComment).getByRole('button', { name: /upvote greycrow comment/i }));
+    expect(within(firstComment).getByText(/19 upvotes/i)).toBeInTheDocument();
+
+    await user.click(within(thread).getByRole('button', { name: /dispute selected case/i }));
+    expect(within(thread).getByText(/92 downvotes/i)).toBeInTheDocument();
   });
 
   it('deep-links directly to a separate page from the URL hash', () => {

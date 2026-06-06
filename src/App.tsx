@@ -26,7 +26,7 @@ const heroLoop = new URL('../vid/clip 3.mp4', import.meta.url).href;
 const portalLoop = new URL('../vid/clip 5.mp4', import.meta.url).href;
 const introSafetyTimeoutMs = 12000;
 
-type PageKey = 'home' | 'submit' | 'archive' | 'manifest' | 'architecture' | 'rules' | 'health';
+type PageKey = 'home' | 'submit' | 'archive' | 'manifest' | 'architecture' | 'about' | 'rules' | 'health';
 
 type NavItem = {
   key: PageKey;
@@ -50,6 +50,7 @@ const navItems: NavItem[] = [
   { key: 'archive', label: 'Archive', marker: '/' },
   { key: 'manifest', label: 'Manifest', marker: '/' },
   { key: 'architecture', label: 'Architecture', marker: '/' },
+  { key: 'about', label: 'About', marker: '/' },
   { key: 'rules', label: 'Rules', marker: '/' },
   { key: 'health', label: 'Status', marker: '/' },
 ];
@@ -82,6 +83,11 @@ const exampleReports = [
     votes: { up: 248, down: 91 },
     comments: 37,
     evidence: ['Cleaned castle map', 'Witness-lore timeline', 'Counter-evidence diary note'],
+    threadSummary: 'Thread status: Heavily Disputed. Community members are comparing cleaned lore artifacts, disputed witness timelines, and counter-evidence notes.',
+    commentsList: [
+      { id: 'greycrow', anonymousName: 'GreyCrow', type: 'supporting_evidence', body: 'Adds fictional timeline context supporting the castle ledger story arc.', votes: { up: 18, down: 2 } },
+      { id: 'silentbell', anonymousName: 'SilentBell', type: 'challenge', body: 'Questions whether the sealed ledger evidence is strong enough for archive credibility.', votes: { up: 11, down: 1 } },
+    ],
   },
   {
     id: 'DA-MORIARTY-014',
@@ -93,6 +99,11 @@ const exampleReports = [
     votes: { up: 412, down: 38 },
     comments: 64,
     evidence: ['Signed blueprint hash', 'Cleaned lab notebook', 'Archive manifest link'],
+    threadSummary: 'Thread status: Strongly Supported. The demo thread connects signed blueprint hashes, cleaned lab notes, and archive-manifest references.',
+    commentsList: [
+      { id: 'archiveowl', anonymousName: 'ArchiveOwl', type: 'supporting_evidence', body: 'Maps the fictional patent transfer to a signed blueprint hash.', votes: { up: 26, down: 3 } },
+      { id: 'blueember', anonymousName: 'BlueEmber', type: 'lore_context', body: 'Adds worldbuilding context for the academy shell organizations.', votes: { up: 17, down: 2 } },
+    ],
   },
   {
     id: 'DA-HOOK-022',
@@ -104,6 +115,11 @@ const exampleReports = [
     votes: { up: 173, down: 84 },
     comments: 29,
     evidence: ['Cleaned port manifest', 'Dispute comment thread', 'Replica compass photos'],
+    threadSummary: 'Thread status: Counter-Evidence Added. The demo thread compares cleaned port records, replica photos, and rival crew comments.',
+    commentsList: [
+      { id: 'northstar', anonymousName: 'NorthStar', type: 'counter_evidence', body: 'Adds fictional counter-evidence that the compass transfer was inherited.', votes: { up: 14, down: 4 } },
+      { id: 'redwake', anonymousName: 'RedWake', type: 'duplicate_warning', body: 'Flags a possible duplicate with an older sea-route archive case.', votes: { up: 9, down: 2 } },
+    ],
   },
 ];
 
@@ -210,6 +226,7 @@ function App() {
           {activePage === 'archive' && <ArchivePage />}
           {activePage === 'manifest' && <ManifestPage />}
           {activePage === 'architecture' && <ArchitecturePage />}
+          {activePage === 'about' && <AboutPage />}
           {activePage === 'rules' && <RulesPage />}
           {activePage === 'health' && <HealthPage />}
         </div>
@@ -454,33 +471,78 @@ function StatusTracker() {
 }
 
 function ArchivePage() {
+  const [selectedReportId, setSelectedReportId] = useState(exampleReports[0].id);
+  const [caseVotes, setCaseVotes] = useState(() => Object.fromEntries(exampleReports.map((report) => [report.id, report.votes])));
+  const [commentVotes, setCommentVotes] = useState(() => Object.fromEntries(
+    exampleReports.flatMap((report) => report.commentsList.map((comment) => [comment.id, comment.votes])),
+  ));
+
+  const selectedReport = exampleReports.find((report) => report.id === selectedReportId) ?? exampleReports[0];
+
+  function voteCase(reportId: string, vote: 'up' | 'down') {
+    setCaseVotes((current) => ({
+      ...current,
+      [reportId]: {
+        ...current[reportId],
+        [vote]: current[reportId][vote] + 1,
+      },
+    }));
+  }
+
+  function voteComment(commentId: string, vote: 'up' | 'down') {
+    setCommentVotes((current) => ({
+      ...current,
+      [commentId]: {
+        ...current[commentId],
+        [vote]: current[commentId][vote] + 1,
+      },
+    }));
+  }
+
   return (
     <section className="page-section" aria-labelledby="archive-title">
-      <PageHeader eyebrow="Community dispute layer" title="Recent fictional cases" body="Archive browsing is separated from submission so case cards, filters, voting signals, and dispute animations can be designed as their own experience." />
+      <PageHeader eyebrow="Community dispute layer" title="Recent fictional cases" body="Archive cards now open connected thread views. Demo votes update in memory only; a production build would connect them to anonymous identity, reputation, and append-only event services." />
 
       <section className="example-report-grid" aria-label="Example fictional archive reports">
-        {exampleReports.map((report) => (
-          <article className="portal-card example-report" key={report.id}>
-            <div className="report-topline">
-              <span className="case-id">{report.id}</span>
-              <span className="status-pill">{report.status}</span>
-            </div>
-            <h2>{report.title}</h2>
-            <p className="report-villain">{report.villain} · {report.category}</p>
-            <p>{report.summary}</p>
-            <div className="report-signals" aria-label={`${report.title} community signals`}>
-              <span>▲ {report.votes.up} upvotes</span>
-              <span>▼ {report.votes.down} downvotes</span>
-              <span>{report.comments} comments</span>
-            </div>
-            <div className="evidence-links" aria-label={`${report.title} evidence links`}>
-              {report.evidence.map((item) => (
-                <a href={routeHref('manifest')} key={item}><ExternalLink size={14} /> {item}</a>
-              ))}
-            </div>
-          </article>
-        ))}
+        {exampleReports.map((report) => {
+          const votes = caseVotes[report.id];
+          const selected = selectedReport.id === report.id;
+          return (
+            <article className={`portal-card example-report${selected ? ' selected-report' : ''}`} key={report.id} aria-label={`${report.title} case card`}>
+              <div className="report-topline">
+                <span className="case-id">{report.id}</span>
+                <span className="status-pill">{report.status}</span>
+              </div>
+              <h2>{report.title}</h2>
+              <p className="report-villain">{report.villain} · {report.category}</p>
+              <p>{report.summary}</p>
+              <div className="report-signals" aria-label={`${report.title} community signals`}>
+                <span>▲ {votes.up} upvotes</span>
+                <span>▼ {votes.down} downvotes</span>
+                <span>{report.comments} comments</span>
+              </div>
+              <div className="vote-actions" aria-label={`${report.title} voting actions`}>
+                <button type="button" onClick={() => voteCase(report.id, 'up')} aria-label={`Upvote ${report.title}`}>▲ Upvote</button>
+                <button type="button" onClick={() => voteCase(report.id, 'down')} aria-label={`Downvote ${report.title}`}>▼ Downvote</button>
+                <button type="button" onClick={() => setSelectedReportId(report.id)} aria-label={`Open thread for ${report.title}`}>Open thread</button>
+              </div>
+              <div className="evidence-links" aria-label={`${report.title} evidence links`}>
+                {report.evidence.map((item) => (
+                  <button type="button" key={item} onClick={() => setSelectedReportId(report.id)}><ExternalLink size={14} /> {item}</button>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </section>
+
+      <CaseThread
+        report={selectedReport}
+        votes={caseVotes[selectedReport.id]}
+        commentVotes={commentVotes}
+        onCaseVote={(vote) => voteCase(selectedReport.id, vote)}
+        onCommentVote={voteComment}
+      />
 
       <section className="portal-card recent-panel archive-page-card">
         <div className="panel-head">
@@ -495,15 +557,85 @@ function ArchivePage() {
             <span>ID</span><span>Title</span><span>Status</span><span>Signals</span>
           </div>
           {recentCases.map((item) => (
-            <div className="case-row" role="row" key={item.id}>
+            <button className="case-row case-row-button" role="row" key={item.id} type="button" onClick={() => setSelectedReportId(exampleReports[0].id)}>
               <span className="case-id">{item.id}</span>
               <strong>{item.title}</strong>
               <span className="status-pill">{item.status}</span>
               <span>{item.updated}</span>
-            </div>
+            </button>
           ))}
         </div>
       </section>
+    </section>
+  );
+}
+
+function CaseThread({
+  report,
+  votes,
+  commentVotes,
+  onCaseVote,
+  onCommentVote,
+}: {
+  report: typeof exampleReports[number];
+  votes: { up: number; down: number };
+  commentVotes: Record<string, { up: number; down: number }>;
+  onCaseVote: (vote: 'up' | 'down') => void;
+  onCommentVote: (commentId: string, vote: 'up' | 'down') => void;
+}) {
+  return (
+    <section className="portal-card case-thread" aria-label="Selected case thread">
+      <div className="thread-header">
+        <div>
+          <p className="eyebrow">Selected thread</p>
+          <h2>{report.title}</h2>
+          <p className="report-villain">{report.id} · {report.category}</p>
+        </div>
+        <div className="thread-votes" aria-label={`${report.title} selected thread votes`}>
+          <span>▲ {votes.up} upvotes</span>
+          <span>▼ {votes.down} downvotes</span>
+        </div>
+      </div>
+
+      <p className="thread-status">{report.threadSummary}</p>
+
+      <div className="vote-actions thread-actions">
+        <button type="button" onClick={() => onCaseVote('up')} aria-label="Support selected case">▲ Support selected case</button>
+        <button type="button" onClick={() => onCaseVote('down')} aria-label="Dispute selected case">▼ Dispute selected case</button>
+      </div>
+
+      <div className="thread-columns">
+        <section aria-label={`${report.title} cleaned evidence`}>
+          <h3>Cleaned evidence links</h3>
+          <ul className="thread-list">
+            {report.evidence.map((item) => <li key={item}><ExternalLink size={14} /> {item}</li>)}
+          </ul>
+        </section>
+
+        <section aria-label={`${report.title} comment thread`}>
+          <h3>Community comments</h3>
+          <div className="comment-list">
+            {report.commentsList.map((comment) => {
+              const votesForComment = commentVotes[comment.id];
+              return (
+                <article className="comment-card" key={comment.id} aria-label={`${comment.anonymousName} comment`}>
+                  <div className="comment-topline">
+                    <strong>{comment.anonymousName}</strong>
+                    <span>{comment.type.replaceAll('_', ' ')}</span>
+                  </div>
+                  <p>{comment.body}</p>
+                  <div className="comment-actions">
+                    <span>{votesForComment.up} upvotes</span>
+                    <span>{votesForComment.down} downvotes</span>
+                    <button type="button" onClick={() => onCommentVote(comment.id, 'up')} aria-label={`Upvote ${comment.anonymousName} comment`}>▲</button>
+                    <button type="button" onClick={() => onCommentVote(comment.id, 'down')} aria-label={`Downvote ${comment.anonymousName} comment`}>▼</button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </div>
     </section>
   );
 }
@@ -610,6 +742,44 @@ function ArchitecturePage() {
           <LockKeyhole />
           <p><strong>Developer reference:</strong> see `docs/architecture.md` plus `examples/case-package/DA-000184-v1/` and `examples/archive/death-alliance-manifest.json` for concrete package shapes.</p>
         </div>
+      </section>
+    </section>
+  );
+}
+
+function AboutPage() {
+  return (
+    <section className="page-section" aria-labelledby="about-title">
+      <PageHeader eyebrow="About the project" title="About Death Alliance" body="A fictional anonymous clue archive demo for storytelling, ARG, lore, community dispute, metadata-safe publishing design, and resilient public archive architecture." />
+
+      <section className="notice-panel about-intro" aria-label="About Death Alliance introduction">
+        <Skull />
+        <div>
+          <h2 id="about-title">Inspired by dark justice fiction</h2>
+          <p>Death Alliance is inspired by the novel 蒙冤入狱，重生后我大开杀戒. It is not affiliated with the original author, publisher, or platform. This app is a fictional / ARG / roleplay demo, not a production reporting service.</p>
+        </div>
+      </section>
+
+      <section className="portal-card rules-grid about-grid">
+        <article>
+          <h2>What the app demonstrates</h2>
+          <p>Cinematic landing, anonymous-name demo intake, fictional archive cards, working in-memory support/dispute votes, connected case threads, comment voting, signed-manifest concepts, and archive-health UI.</p>
+        </article>
+        <article>
+          <h2>Recommended production features</h2>
+          <p>Backend upload sandbox, metadata scanner, visible private-data detector, malware scan, Argon2id hidden-key identities, append-only event log, signed packages, manifest verification, abuse reports, and CID blocklist workflow.</p>
+        </article>
+      </section>
+
+      <section className="portal-card architecture-flow">
+        <div className="panel-head">
+          <ShieldAlert />
+          <div>
+            <p className="eyebrow">Safety boundary</p>
+            <h2>Fictional use only</h2>
+          </div>
+        </div>
+        <p>Do not use this project for real-world accusations, harassment, threats, doxxing, revenge, or exposing identifiable people. All cases, comments, evidence, and archive examples in this demo should remain fictional, anonymized, roleplay-based, or part of a created story universe.</p>
       </section>
     </section>
   );
