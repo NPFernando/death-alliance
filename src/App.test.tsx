@@ -1,12 +1,17 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { createCaseId, isSubmissionTextSafe, safeCaseStatuses } from './safety';
 
 describe('Death Alliance safe ARG portal', () => {
+  beforeEach(() => {
+    window.location.hash = '';
+  });
+
   afterEach(() => {
     vi.useRealTimers();
+    window.location.hash = '';
   });
 
   it('renders the cinematic fictional archive landing page', () => {
@@ -53,20 +58,53 @@ describe('Death Alliance safe ARG portal', () => {
     expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
   });
 
-  it('renders the CloudScope-style dark operations layout', () => {
+  it('uses separate hash-routed pages for each menu item', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const nav = screen.getByRole('navigation', { name: /death alliance sections/i });
+
+    expect(nav).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /welcome to the death alliance/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /safe draft case/i })).not.toBeInTheDocument();
+
+    await user.click(within(nav).getByRole('link', { name: /submit clue/i }));
+    expect(await screen.findByRole('heading', { name: /safe draft case/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /welcome to the death alliance/i })).not.toBeInTheDocument();
+
+    await user.click(within(nav).getByRole('link', { name: /archive/i }));
+    expect(await screen.findByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /safe draft case/i })).not.toBeInTheDocument();
+
+    await user.click(within(nav).getByRole('link', { name: /manifest/i }));
+    expect(await screen.findByRole('heading', { name: /cleaned archive flow/i })).toBeInTheDocument();
+
+    await user.click(within(nav).getByRole('link', { name: /rules/i }));
+    expect(await screen.findByRole('heading', { name: /safety boundary/i })).toBeInTheDocument();
+
+    await user.click(within(nav).getByRole('link', { name: /status/i }));
+    expect(await screen.findByRole('heading', { name: /latest signed manifest/i })).toBeInTheDocument();
+  });
+
+  it('deep-links directly to a separate page from the URL hash', () => {
+    window.location.hash = '#/archive';
+    render(<App />);
+
+    expect(screen.getByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /welcome to the death alliance/i })).not.toBeInTheDocument();
+  });
+
+  it('renders the CloudScope-style dark operations shell around routed pages', () => {
     render(<App />);
 
     expect(screen.getByRole('navigation', { name: /death alliance sections/i })).toBeInTheDocument();
     expect(screen.getByText(/daemon net/i)).toBeInTheDocument();
-    expect(screen.getByText(/public archive distribution system/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/cinematic death alliance background loop/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /submit fictional clue/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /track archive status/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
   });
 
   it('blocks draft generation until fictional consent and safe minimum fields are present', async () => {
     const user = userEvent.setup();
+    window.location.hash = '#/submit';
     render(<App />);
 
     const submit = screen.getByRole('button', { name: /generate safe draft case/i });
