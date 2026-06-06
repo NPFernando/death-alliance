@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import App from './App';
@@ -19,9 +19,9 @@ describe('Death Alliance safe ARG portal', () => {
     const submit = screen.getByRole('button', { name: /generate safe draft case/i });
     expect(submit).toBeDisabled();
 
-    await user.type(screen.getByLabelText(/^Anonymous Name/i), 'Silent Witness');
-    await user.type(screen.getByLabelText(/^Case Title/i), 'The Stolen Engine');
-    await user.type(screen.getByLabelText(/^Case Description/i), 'A fictional case about a betrayed inventor and a stolen engine inside a created story universe.');
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'Silent Witness' } });
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'The Stolen Engine' } });
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'A fictional case about a betrayed inventor and a stolen engine inside a created story universe.' } });
     expect(submit).toBeDisabled();
 
     await user.click(screen.getByRole('checkbox'));

@@ -60,7 +60,9 @@ function App() {
         </div>
         <div className="hero-copy">
           <p className="eyebrow">Fictional ARG archive · metadata-safe · signed · mirrorable</p>
-          <h1 id="hero-title" className="typewriter">Welcome to the Death Alliance.</h1>
+          <h1 id="hero-title" className="typewriter" aria-label="Welcome to the Death Alliance.">
+            <span className="hero-title-text" aria-hidden="true">Welcome to the Death Alliance.</span>
+          </h1>
           <p className="hero-line">A fictional archive for hidden crimes, betrayed inventors, stolen futures, and buried truths.</p>
           <p className="hero-line muted">Submit a story-world case. Let the community support it, dispute it, or bury it in the archive record.</p>
           <div className="hero-actions">
