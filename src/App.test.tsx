@@ -1,10 +1,14 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 import { createCaseId, isSubmissionTextSafe, safeCaseStatuses } from './safety';
 
 describe('Death Alliance safe ARG portal', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders the cinematic fictional archive landing page', () => {
     render(<App />);
     expect(screen.getByRole('heading', { name: /welcome to the death alliance/i })).toBeInTheDocument();
@@ -33,6 +37,19 @@ describe('Death Alliance safe ARG portal', () => {
     expect(screen.queryByLabelText(/death alliance cinematic loading screen/i)).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /replay intro/i }));
+    expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
+  });
+
+  it('keeps the intro visible until Clip 1 finishes or the user skips it', () => {
+    vi.useFakeTimers();
+    render(<App />);
+
+    expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(5200);
+    });
+
     expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
   });
 

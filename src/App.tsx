@@ -23,6 +23,7 @@ const heroImage = new URL('../img/ChatGPT Image Jun 6, 2026, 09_57_57 AM.png', i
 const introLoop = new URL('../vid/clip 1.mp4', import.meta.url).href;
 const heroLoop = new URL('../vid/clip 3.mp4', import.meta.url).href;
 const portalLoop = new URL('../vid/clip 5.mp4', import.meta.url).href;
+const introSafetyTimeoutMs = 12000;
 
 type DraftCase = {
   anonymousName: string;
@@ -65,7 +66,7 @@ function App() {
   useEffect(() => {
     if (!introVisible) return undefined;
 
-    const timer = window.setTimeout(() => setIntroVisible(false), 5200);
+    const timer = window.setTimeout(() => setIntroVisible(false), introSafetyTimeoutMs);
     return () => window.clearTimeout(timer);
   }, [introVisible]);
 
@@ -94,6 +95,7 @@ function App() {
             playsInline
             preload="auto"
             poster={heroImage}
+            onEnded={() => setIntroVisible(false)}
             onError={() => setIntroVisible(false)}
           >
             <source src={introLoop} type="video/mp4" />
