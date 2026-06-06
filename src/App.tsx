@@ -220,15 +220,19 @@ function App() {
 }
 
 function IntroLoader({ onComplete }: { onComplete: () => void }) {
+  const [videoReady, setVideoReady] = useState(false);
+
   return (
     <section className="intro-loader" aria-label="Death Alliance cinematic loading screen">
       <video
-        className="intro-video"
+        className={`intro-video${videoReady ? ' is-ready' : ''}`}
+        data-testid="intro-video"
         autoPlay
         muted
         playsInline
         preload="auto"
-        poster={heroImage}
+        onCanPlay={() => setVideoReady(true)}
+        onPlaying={() => setVideoReady(true)}
         onEnded={onComplete}
         onError={onComplete}
       >

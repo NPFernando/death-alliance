@@ -61,6 +61,18 @@ describe('Death Alliance safe ARG portal', () => {
     expect(screen.getByLabelText(/death alliance cinematic loading screen/i)).toBeInTheDocument();
   });
 
+  it('keeps the intro black until the video is ready instead of flashing the poster image', () => {
+    render(<App />);
+
+    const introVideo = screen.getByTestId('intro-video');
+    expect(introVideo).not.toHaveAttribute('poster');
+    expect(introVideo).toHaveClass('intro-video');
+    expect(introVideo).not.toHaveClass('is-ready');
+
+    fireEvent.canPlay(introVideo);
+    expect(introVideo).toHaveClass('is-ready');
+  });
+
   it('uses separate hash-routed pages for each menu item', async () => {
     const user = userEvent.setup();
     render(<App />);

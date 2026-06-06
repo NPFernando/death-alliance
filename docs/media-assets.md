@@ -42,6 +42,12 @@ The repository currently ignores:
 vid/*watermarked*.mp4
 ```
 
+## Demo media and production boundary
+
+The GitHub Pages site is a static demo / portfolio preview, not production. Demo media can be used for design review only when its licensing and watermark state are clearly understood. Production must use clean licensed assets that do not require watermark removal or watermark blurring.
+
+If a generated export contains blurred areas because a watermark or mark was removed by an upstream tool, treat it as demo-only visual material. Do not represent it as a production-ready clean asset, and replace it before any production launch.
+
 ## Replacing the homepage image with a clean video
 
 When a clean licensed/watermark-free homepage video is available, use this path:

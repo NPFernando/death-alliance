@@ -23,11 +23,13 @@ The local Vite URL usually looks like:
 http://127.0.0.1:5173/death-alliance/#/home
 ```
 
-The deployed GitHub Pages URL is:
+The deployed GitHub Pages demo URL is:
 
 ```text
 https://npfernando.github.io/death-alliance/
 ```
+
+This URL is a static demo / portfolio preview only, not a production deployment. It is useful for design review, frontend QA, and stakeholder walkthroughs, but it does not provide the production V4 backend services: upload sandboxing, metadata scanning/removal, visible private-data processing, malware scanning, package signing, IPFS publishing, torrent snapshot generation, abuse-report handling, or CID blocklist enforcement.
 
 ## Routes
 

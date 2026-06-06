@@ -8,7 +8,9 @@ The platform is for fictional, anonymized, roleplay, ARG, lore, and worldbuildin
 
 It must not be used for real-world accusations against identifiable people, private personal data, harassment, threats, revenge content, or unsafe uploads.
 
-## Current implementation
+## Current demo implementation
+
+The current GitHub Pages site is a static demo / portfolio preview only. It is not production and does not process real submissions, uploads, identity sessions, metadata scans, signed packages, IPFS publishing, torrent snapshots, abuse reports, or CID blocklists.
 
 ```text
 GitHub repository

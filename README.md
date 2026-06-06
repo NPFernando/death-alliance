@@ -41,11 +41,13 @@ Only after:
 
 Community review happens after publishing through comments, votes, evidence updates, and disputes.
 
-## Live site
+## Live demo site
 
 The public GitHub Pages build auto-updates from pushes to `main` after the validation/build workflow succeeds:
 
 https://npfernando.github.io/death-alliance/
+
+Important: this GitHub Pages deployment is a static demo / portfolio preview only. It is not a production deployment and must not be treated as a live anonymous clue service. It uses static mock data and decorative demo media; it does not include the production backend, upload sandbox, metadata scanner, visible private-data detector, package signing service, IPFS publisher, torrent snapshot builder, moderation workflow, abuse-report queue, or takedown/blocklist operations required by the V4 architecture.
 
 Useful routes:
 
