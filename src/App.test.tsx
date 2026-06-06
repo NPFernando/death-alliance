@@ -17,6 +17,9 @@ describe('Death Alliance safe ARG portal', () => {
   it('renders the cinematic fictional archive landing page', () => {
     render(<App />);
     expect(screen.getByRole('heading', { name: /welcome to the death alliance/i })).toBeInTheDocument();
+    expect(screen.getByText(/we speak for the powerless and wield the sword for the wronged/i)).toBeInTheDocument();
+    expect(screen.getByText(/if you witness evil, please submit it here/i)).toBeInTheDocument();
+    expect(screen.getByText(/after verification, death will come to deliver judgment/i)).toBeInTheDocument();
     expect(screen.getAllByText(/fictional archive/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/fictional \/ ARG \/ roleplay only/i)).toBeInTheDocument();
   });
@@ -74,6 +77,9 @@ describe('Death Alliance safe ARG portal', () => {
 
     await user.click(within(nav).getByRole('link', { name: /archive/i }));
     expect(await screen.findByRole('heading', { name: /recent fictional cases/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /the crimson castle ledger/i })).toBeInTheDocument();
+    expect(screen.getByText(/248 upvotes/i)).toBeInTheDocument();
+    expect(screen.getByText(/counter-evidence diary note/i)).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: /safe draft case/i })).not.toBeInTheDocument();
 
     await user.click(within(nav).getByRole('link', { name: /manifest/i }));

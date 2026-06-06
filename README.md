@@ -8,13 +8,16 @@ Important: this project is for fictional, anonymized, roleplay, ARG, and creativ
 
 ## What is implemented
 
+- Hash-routed GitHub Pages deployment with separate Home, Submit, Archive, Manifest, Rules, and Status pages.
 - Cinematic black landing page with animated Grim Reaper / Death silhouette, halo, fog, and typewriter-style copy.
 - Safe fictional case-type gate.
 - Anonymous identity model UI using anonymous name + hidden key warning.
 - Fictional clue submission portal with consent gate.
+- Example fictional archive reports with upvotes, downvotes, comments, and evidence links.
 - Metadata-safe publishing flow visualization.
 - Community dispute/voting/archive health mock dashboard.
 - Signed public archive distribution concept using IPFS/torrent-style snapshots as a public archive distribution system.
+- GitHub Pages workflow that validates, builds, and deploys the live site after pushes to `main`.
 - Safety checks that block real private-data collection patterns in the static codebase.
 
 ## Safety model
@@ -37,6 +40,21 @@ Only after:
 8. Package signing
 
 Community review happens after publishing through comments, votes, evidence updates, and disputes.
+
+## Live site
+
+The public GitHub Pages build auto-updates from pushes to `main` after the validation/build workflow succeeds:
+
+https://npfernando.github.io/death-alliance/
+
+Useful routes:
+
+- `#/home`
+- `#/submit`
+- `#/archive`
+- `#/manifest`
+- `#/rules`
+- `#/health`
 
 ## Local setup
 
@@ -89,6 +107,14 @@ scripts/
 - IPFS publisher and torrent snapshot queue.
 - Append-only event log, signed manifest, mirror verification, CID blocklist, and archive health API.
 
+## Contributing
+
+Forks, self-hosted instances, and safe fictional/archive improvements are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
-No license is currently granted. Add a license only when ready to publish terms explicitly.
+MIT License. See [LICENSE](LICENSE).
+
+Anyone may create, modify, deploy, and run their own instance under the MIT terms. Public forks are encouraged to credit the original project as a courtesy:
+
+> Based on Death Alliance by Naveen Fernando — created as a fictional archive and safety-first storytelling experiment. Thank you for keeping public-interest creative tools alive for humanity.
