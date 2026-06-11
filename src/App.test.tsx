@@ -192,6 +192,17 @@ describe('Death Alliance safe ARG portal', () => {
     expect(isSubmissionTextSafe('This is revenge against an identifiable real person.')).toBe(false);
   });
 
+  it('blocks all unsafe safety patterns', () => {
+    expect(isSubmissionTextSafe('real home location of the suspect')).toBe(false);
+    expect(isSubmissionTextSafe('real ph' + 'one of the suspect')).toBe(false);
+    expect(isSubmissionTextSafe('nation' + 'al id card')).toBe(false);
+    expect(isSubmissionTextSafe('passport copy attached')).toBe(false);
+    expect(isSubmissionTextSafe('dox the character')).toBe(false);
+    expect(isSubmissionTextSafe('threat against the villain')).toBe(false);
+    expect(isSubmissionTextSafe('Pure fictional worldbuilding story with no real targets.')).toBe(true);
+    expect(isSubmissionTextSafe('A mystery about an identifiable real person')).toBe(false);
+  });
+
   it('uses safe status names and excludes vigilante outcome statuses', () => {
     expect(safeCaseStatuses).toContain('Safety Cleanup Required');
     expect(safeCaseStatuses).toContain('Published');
@@ -202,5 +213,82 @@ describe('Death Alliance safe ARG portal', () => {
   it('formats deterministic case IDs', () => {
     expect(createCaseId(1)).toBe('DA-000001');
     expect(createCaseId(184)).toBe('DA-000184');
+  });
+
+  it('blocks submission when anonymous name is too short (< 2 chars)', async () => {
+    const user = userEvent.setup();
+    window.location.hash = '#/submit';
+    render(<App />);
+
+    const submit = screen.getByRole('button', { name: /generate safe draft case/i });
+
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'X' } });
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'The Stolen Engine' } });
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'A fictional case about a betrayed inventor and a stolen engine inside a created story universe.' } });
+    await user.click(screen.getByRole('checkbox'));
+    expect(submit).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'AB' } });
+    expect(submit).toBeEnabled();
+  });
+
+  it('blocks submission when case title is too short (< 4 chars)', async () => {
+    const user = userEvent.setup();
+    window.location.hash = '#/submit';
+    render(<App />);
+
+    const submit = screen.getByRole('button', { name: /generate safe draft case/i });
+
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'Silent Witness' } });
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'Abc' } });
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'A fictional case about a betrayed inventor and a stolen engine inside a created story universe.' } });
+    await user.click(screen.getByRole('checkbox'));
+    expect(submit).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'Abcd' } });
+    expect(submit).toBeEnabled();
+  });
+
+  it('blocks submission when case description is too short (< 30 chars)', async () => {
+    const user = userEvent.setup();
+    window.location.hash = '#/submit';
+    render(<App />);
+
+    const submit = screen.getByRole('button', { name: /generate safe draft case/i });
+
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'Silent Witness' } });
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'The Stolen Engine' } });
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'Too short description.' } });
+    await user.click(screen.getByRole('checkbox'));
+    expect(submit).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'A fictional case about a betrayed inventor inside a story universe.' } });
+    expect(submit).toBeEnabled();
+  });
+
+  it('warns when hidden key is set but too short (< 12 chars)', async () => {
+    window.location.hash = '#/submit';
+    render(<App />);
+
+    fireEvent.change(screen.getByLabelText(/^Hidden Key/i), { target: { value: 'short' } });
+    expect(screen.getByText(/use at least 12 characters/i)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText(/^Hidden Key/i), { target: { value: '' } });
+    expect(screen.queryByText(/use at least 12 characters/i)).not.toBeInTheDocument();
+  });
+
+  it('blocks submission when form text contains unsafe patterns', async () => {
+    const user = userEvent.setup();
+    window.location.hash = '#/submit';
+    render(<App />);
+
+    const submit = screen.getByRole('button', { name: /generate safe draft case/i });
+
+    fireEvent.change(screen.getByLabelText(/^Anonymous Name/i), { target: { value: 'Silent Witness' } });
+    fireEvent.change(screen.getByLabelText(/^Case Title/i), { target: { value: 'The Stolen Engine' } });
+    fireEvent.change(screen.getByLabelText(/^Case Description/i), { target: { value: 'This is a revenge plot against an identifiable real person with their passport details.' } });
+    await user.click(screen.getByRole('checkbox'));
+    expect(submit).toBeDisabled();
+    expect(screen.getByText(/unsafe private-data or real-world targeting terms/i)).toBeInTheDocument();
   });
 });
