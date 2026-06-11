@@ -94,6 +94,8 @@
 }
 
 .rail-nav a {
+  position: relative;
+  overflow: hidden;
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: .04em;
@@ -104,10 +106,25 @@
   transition: color .18s ease, border-color .18s ease, background .18s ease;
 }
 
+.rail-nav a::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--red);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .22s ease;
+}
+
+.rail-nav a:hover::before,
+.rail-nav a.active::before {
+  transform: scaleY(1);
+}
+
 .rail-nav a:hover,
 .rail-nav a.active {
   color: var(--fg);
-  border-left-color: var(--red);
   border-right-color: rgba(255, 43, 43, .38);
   background: linear-gradient(90deg, rgba(255, 43, 43, .22), rgba(255,255,255,.025));
 }

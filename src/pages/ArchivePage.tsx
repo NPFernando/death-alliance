@@ -4,6 +4,8 @@ import { CaseThread } from '../components/CaseThread';
 import { PageHeader } from '../components/PageHeader';
 import { exampleReports, recentCases } from '../data';
 
+const clip2 = new URL('../../vid/clip 2.mp4', import.meta.url).href;
+
 export function ArchivePage() {
   const [selectedReportId, setSelectedReportId] = useState(exampleReports[0].id);
   // Demo-only: votes live in memory and reset on page reload
@@ -11,8 +13,16 @@ export function ArchivePage() {
   const [commentVotes, setCommentVotes] = useState(() => Object.fromEntries(
     exampleReports.flatMap((report) => report.commentsList.map((comment) => [comment.id, comment.votes])),
   ));
+  const [bumpedVotes, setBumpedVotes] = useState<Set<string>>(() => new Set());
 
   const selectedReport = exampleReports.find((report) => report.id === selectedReportId) ?? exampleReports[0];
+
+  function bumpVote(key: string) {
+    setBumpedVotes((current) => new Set([...current, key]));
+    window.setTimeout(() => {
+      setBumpedVotes((current) => { const s = new Set(current); s.delete(key); return s; });
+    }, 400);
+  }
 
   function voteCase(reportId: string, vote: 'up' | 'down') {
     setCaseVotes((current) => ({
@@ -22,6 +32,7 @@ export function ArchivePage() {
         [vote]: current[reportId][vote] + 1,
       },
     }));
+    bumpVote(`${reportId}-${vote}`);
   }
 
   function voteComment(commentId: string, vote: 'up' | 'down') {
@@ -32,10 +43,15 @@ export function ArchivePage() {
         [vote]: current[commentId][vote] + 1,
       },
     }));
+    bumpVote(`comment-${commentId}-${vote}`);
   }
 
   return (
-    <section className="page-section" aria-labelledby="archive-title">
+    <section className="page-section archive-section" aria-labelledby="archive-title">
+      <video className="page-bg-video" autoPlay muted loop playsInline aria-hidden="true">
+        <source src={clip2} type="video/mp4" />
+      </video>
+
       <PageHeader eyebrow="Community dispute layer" title="Recent fictional cases" body="Archive cards now open connected thread views. Demo votes update in memory only; a production build would connect them to anonymous identity, reputation, and append-only event services." />
 
       <section className="example-report-grid" aria-label="Example fictional archive reports">
@@ -52,8 +68,8 @@ export function ArchivePage() {
               <p className="report-villain">{report.villain} · {report.category}</p>
               <p>{report.summary}</p>
               <div className="report-signals" aria-label={`${report.title} community signals`}>
-                <span>▲ {votes.up} upvotes</span>
-                <span>▼ {votes.down} downvotes</span>
+                <span className={bumpedVotes.has(`${report.id}-up`) ? 'vote-bump' : undefined}>▲ {votes.up} upvotes</span>
+                <span className={bumpedVotes.has(`${report.id}-down`) ? 'vote-bump' : undefined}>▼ {votes.down} downvotes</span>
                 <span>{report.comments} comments</span>
               </div>
               <div className="vote-actions" aria-label={`${report.title} voting actions`}>
@@ -75,6 +91,7 @@ export function ArchivePage() {
         report={selectedReport}
         votes={caseVotes[selectedReport.id]}
         commentVotes={commentVotes}
+        bumpedVotes={bumpedVotes}
         onCaseVote={(vote) => voteCase(selectedReport.id, vote)}
         onCommentVote={voteComment}
       />

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
@@ -183,7 +183,7 @@ describe('Death Alliance safe ARG portal', () => {
     await user.click(screen.getByRole('checkbox'));
     expect(submit).toBeEnabled();
     await user.click(submit);
-    expect(screen.getByText(/Safe draft created: DA-000302-v1/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText(/Safe draft created: DA-000302-v1/i)).toBeInTheDocument(), { timeout: 2000 });
   });
 
   it('rejects unsafe private-data wording in draft text', () => {

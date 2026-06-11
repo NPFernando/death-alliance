@@ -27,7 +27,7 @@
 /* ── Page section & header ── */
 
 .page-section {
-  animation: page-enter .42s ease both;
+  /* animation handled by data-direction on parent .page-frame */
 }
 
 .page-header {
@@ -79,6 +79,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
   text-decoration: none;
   border: 1px solid rgba(255, 43, 43, .55);
   color: #fff3e2;
@@ -89,11 +90,13 @@
   letter-spacing: .03em;
   cursor: pointer;
   box-shadow: 0 12px 34px rgba(255, 43, 43, .13);
+  touch-action: manipulation;
 }
 
 .ghost-button { background: rgba(0, 0, 0, .34); color: #ddcbc6; }
 .ghost-button.small { min-height: 38px; padding-inline: 18px; }
 .glow-button:hover:not(:disabled), .ghost-button:hover { border-color: var(--red); box-shadow: 0 0 26px rgba(255, 43, 43, .22); }
+.glow-button:active:not(:disabled) { transform: translateY(1px); }
 .glow-button:disabled { opacity: .42; cursor: not-allowed; box-shadow: none; }
 
 .hero-actions {
@@ -124,7 +127,6 @@
 .track-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
 .micro-warning,
-.error-text,
 .success-text,
 .upload-box,
 .signature-box {
@@ -137,8 +139,19 @@
   border: 1px solid rgba(255, 43, 43, .18);
 }
 
+.error-text {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  margin: 10px 0;
+  background: rgba(255, 43, 43, .055);
+  border: 1px solid rgba(255, 43, 43, .42);
+  color: #ffb7b7;
+  /* animation: shake applied via animations.css */
+}
+
 .micro-warning { color: #e7bd72; }
-.error-text { color: #ffb7b7; border-color: rgba(255, 43, 43, .42); }
 .success-text { color: #9df0bd; border-color: rgba(80, 250, 123, .30); background: rgba(80, 250, 123, .08); }
 .upload-box, .signature-box { color: #d3c3bd; }
 .upload-box p, .signature-box p { margin: 0; }
@@ -149,6 +162,30 @@
 }
 .checkbox-row input { width: 1.25rem; height: 1.25rem; margin-top: .12rem; accent-color: var(--red); cursor: pointer; }
 .submit-button { width: 100%; margin-top: 8px; }
+
+/* ── Spinner ── */
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, .28);
+  border-top-color: #fff3e2;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Char count ── */
+
+.char-count {
+  display: block;
+  font-size: 11px;
+  text-align: right;
+  margin-top: 4px;
+}
+.char-count--warn { color: #ffb7b7; }
+.char-count--ok { color: rgba(157, 240, 189, .65); }
 
 /* ── Status flow tracker ── */
 

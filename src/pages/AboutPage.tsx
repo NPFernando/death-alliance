@@ -1,9 +1,15 @@
 import { ShieldAlert, Skull } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 
+const clip4 = new URL('../../vid/clip 4.mp4', import.meta.url).href;
+
 export function AboutPage() {
   return (
-    <section className="page-section" aria-labelledby="about-title">
+    <section className="page-section about-section" aria-labelledby="about-title">
+      <video className="page-bg-video" autoPlay muted loop playsInline aria-hidden="true">
+        <source src={clip4} type="video/mp4" />
+      </video>
+
       <PageHeader eyebrow="About the project" title="About Death Alliance" body="A fictional anonymous clue archive demo for storytelling, ARG, lore, community dispute, metadata-safe publishing design, and resilient public archive architecture." />
 
       <section className="notice-panel about-intro" aria-label="About Death Alliance introduction">

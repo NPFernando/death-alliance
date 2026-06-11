@@ -2,6 +2,7 @@ import { Skull } from 'lucide-react';
 import { useState } from 'react';
 
 const introLoop = new URL('../../vid/clip 1.mp4', import.meta.url).href;
+const introLoopMobile = new URL('../../vid/clip 1_mobile.mp4', import.meta.url).href;
 
 export function IntroLoader({ onComplete }: { onComplete: () => void }) {
   const [videoReady, setVideoReady] = useState(false);
@@ -20,6 +21,7 @@ export function IntroLoader({ onComplete }: { onComplete: () => void }) {
         onEnded={onComplete}
         onError={onComplete}
       >
+        <source src={introLoopMobile} type="video/mp4" media="(max-width: 920px)" />
         <source src={introLoop} type="video/mp4" />
         Your browser does not support decorative MP4 background video.
       </video>

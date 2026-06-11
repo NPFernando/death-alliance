@@ -7,6 +7,7 @@ import type { DraftCase } from '../types';
 export type SubmitPageProps = {
   draft: DraftCase;
   submittedCaseId: string | null;
+  generating: boolean;
   hiddenKeyWarning: boolean;
   formSafe: boolean;
   canSubmit: boolean;
@@ -14,7 +15,13 @@ export type SubmitPageProps = {
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export function SubmitPage({ draft, submittedCaseId, hiddenKeyWarning, formSafe, canSubmit, onUpdate, onSubmit }: SubmitPageProps) {
+const DESC_MIN = 30;
+const DESC_WARN = 500;
+
+export function SubmitPage({ draft, submittedCaseId, generating, hiddenKeyWarning, formSafe, canSubmit, onUpdate, onSubmit }: SubmitPageProps) {
+  const descLen = draft.description.length;
+  const descClass = descLen === 0 ? '' : descLen < DESC_MIN ? 'char-count--warn' : 'char-count--ok';
+
   return (
     <section className="page-section" aria-labelledby="submit-title">
       <PageHeader eyebrow="Anonymous clue portal" title="Submit fictional clue" body="This page can now evolve independently with its own animations, scan states, cleanup warnings, upload flow, and package preview." />
@@ -59,6 +66,11 @@ export function SubmitPage({ draft, submittedCaseId, hiddenKeyWarning, formSafe,
 
           <label>Case Description
             <textarea value={draft.description} onChange={(event) => onUpdate('description', event.target.value)} placeholder="Write fictional, anonymized, story-world details only." />
+            {descLen > 0 && (
+              <span className={`char-count ${descClass}`} aria-live="polite">
+                {descLen < DESC_MIN ? `${DESC_MIN - descLen} more chars needed` : descLen >= DESC_WARN ? `${descLen} chars` : `${descLen} chars — minimum met`}
+              </span>
+            )}
           </label>
           {!formSafe && <p className="error-text">This draft appears to reference unsafe private-data or real-world targeting terms. Rewrite it as fictional/anonymized story content.</p>}
 
@@ -75,7 +87,9 @@ export function SubmitPage({ draft, submittedCaseId, hiddenKeyWarning, formSafe,
             <span>I confirm this submission is fictional, anonymized, roleplay-based, or part of a created story universe, and contains no real private information or real-world accusations against identifiable people.</span>
           </label>
 
-          <button className="glow-button submit-button" disabled={!canSubmit}>Generate Safe Draft Case</button>
+          <button className="glow-button submit-button" disabled={!canSubmit || generating}>
+            {generating ? <><span className="btn-spinner" aria-hidden="true" />Generating…</> : 'Generate Safe Draft Case'}
+          </button>
           {submittedCaseId && <p className="success-text">Safe draft created: {submittedCaseId}-v1 · Status: Safety Cleanup Required</p>}
         </form>
 

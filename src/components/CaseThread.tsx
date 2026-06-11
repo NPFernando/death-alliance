@@ -5,11 +5,12 @@ type CaseThreadProps = {
   report: CaseReport;
   votes: { up: number; down: number };
   commentVotes: Record<string, { up: number; down: number }>;
+  bumpedVotes: Set<string>;
   onCaseVote: (vote: 'up' | 'down') => void;
   onCommentVote: (commentId: string, vote: 'up' | 'down') => void;
 };
 
-export function CaseThread({ report, votes, commentVotes, onCaseVote, onCommentVote }: CaseThreadProps) {
+export function CaseThread({ report, votes, commentVotes, bumpedVotes, onCaseVote, onCommentVote }: CaseThreadProps) {
   return (
     <section className="portal-card case-thread" aria-label="Selected case thread">
       <div className="thread-header">
@@ -19,8 +20,8 @@ export function CaseThread({ report, votes, commentVotes, onCaseVote, onCommentV
           <p className="report-villain">{report.id} · {report.category}</p>
         </div>
         <div className="thread-votes" aria-label={`${report.title} selected thread votes`}>
-          <span>▲ {votes.up} upvotes</span>
-          <span>▼ {votes.down} downvotes</span>
+          <span className={bumpedVotes.has(`${report.id}-up`) ? 'vote-bump' : undefined}>▲ {votes.up} upvotes</span>
+          <span className={bumpedVotes.has(`${report.id}-down`) ? 'vote-bump' : undefined}>▼ {votes.down} downvotes</span>
         </div>
       </div>
 
@@ -52,8 +53,8 @@ export function CaseThread({ report, votes, commentVotes, onCaseVote, onCommentV
                   </div>
                   <p>{comment.body}</p>
                   <div className="comment-actions">
-                    <span>{votesForComment.up} upvotes</span>
-                    <span>{votesForComment.down} downvotes</span>
+                    <span className={bumpedVotes.has(`comment-${comment.id}-up`) ? 'vote-bump' : undefined}>{votesForComment.up} upvotes</span>
+                    <span className={bumpedVotes.has(`comment-${comment.id}-down`) ? 'vote-bump' : undefined}>{votesForComment.down} downvotes</span>
                     <button type="button" onClick={() => onCommentVote(comment.id, 'up')} aria-label={`Upvote ${comment.anonymousName} comment`}>▲</button>
                     <button type="button" onClick={() => onCommentVote(comment.id, 'down')} aria-label={`Downvote ${comment.anonymousName} comment`}>▼</button>
                   </div>

@@ -1,8 +1,8 @@
 import { Fingerprint, Flag, Network, RadioTower } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { IntroLoader } from './components/IntroLoader';
 import { SideRail } from './components/SideRail';
-import { initialDraft } from './data';
+import { initialDraft, navItems } from './data';
 import { AboutPage } from './pages/AboutPage';
 import { ArchitecturePage } from './pages/ArchitecturePage';
 import { ArchivePage } from './pages/ArchivePage';
@@ -15,20 +15,30 @@ import { routeFromHash, routeHref } from './routes';
 import { createCaseId, isSubmissionTextSafe } from './safety';
 import type { DraftCase, PageKey } from './types';
 
-const heroImage = new URL('../img/ChatGPT Image Jun 6, 2026, 09_57_57 AM.png', import.meta.url).href;
+const bgPoster = new URL('../img/bg-poster.jpg', import.meta.url).href;
 const heroLoop = new URL('../vid/clip 3.mp4', import.meta.url).href;
 const introSafetyTimeoutMs = 12000;
 
 function App() {
   const [introVisible, setIntroVisible] = useState(true);
   const [activePage, setActivePage] = useState<PageKey>(() => routeFromHash(window.location.hash));
+  const [pageDirection, setPageDirection] = useState<'forward' | 'back' | null>(null);
+  const prevPageRef = useRef<PageKey>(activePage);
+  const [generating, setGenerating] = useState(false);
   // Demo-only form state: not persisted to any backend or browser storage
   const [draft, setDraft] = useState<DraftCase>(initialDraft);
   const [submittedCaseId, setSubmittedCaseId] = useState<string | null>(null);
 
   useEffect(() => {
+    const pageOrder = navItems.map((item) => item.key);
+
     function syncRoute() {
-      setActivePage(routeFromHash(window.location.hash));
+      const next = routeFromHash(window.location.hash);
+      const prevIndex = pageOrder.indexOf(prevPageRef.current);
+      const nextIndex = pageOrder.indexOf(next);
+      setPageDirection(nextIndex > prevIndex ? 'forward' : nextIndex < prevIndex ? 'back' : null);
+      prevPageRef.current = next;
+      setActivePage(next);
     }
 
     window.addEventListener('hashchange', syncRoute);
@@ -53,8 +63,12 @@ function App() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!canSubmit) return;
-    setSubmittedCaseId(createCaseId(302));
+    if (!canSubmit || generating) return;
+    setGenerating(true);
+    window.setTimeout(() => {
+      setSubmittedCaseId(createCaseId(302));
+      setGenerating(false);
+    }, 900);
   }
 
   return (
@@ -68,7 +82,7 @@ function App() {
         muted
         loop
         playsInline
-        poster={heroImage}
+        poster={bgPoster}
       >
         <source src={heroLoop} type="video/mp4" />
         Your browser does not support decorative MP4 background video.
@@ -92,12 +106,13 @@ function App() {
           </div>
         </header>
 
-        <div className="page-frame" data-page={activePage}>
+        <div className="page-frame" data-page={activePage} data-direction={pageDirection ?? undefined}>
           {activePage === 'home' && <HomePage />}
           {activePage === 'submit' && (
             <SubmitPage
               draft={draft}
               submittedCaseId={submittedCaseId}
+              generating={generating}
               hiddenKeyWarning={hiddenKeyWarning}
               formSafe={formSafe}
               canSubmit={canSubmit}

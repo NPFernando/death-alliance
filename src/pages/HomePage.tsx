@@ -2,13 +2,17 @@ import { Eye, ShieldAlert, ShieldCheck, Swords } from 'lucide-react';
 import { routeHref } from '../routes';
 
 const heroImage = new URL('../../img/ChatGPT Image Jun 6, 2026, 09_57_57 AM.png', import.meta.url).href;
+const reaperWebp = new URL('../../img/reaper-hero.webp', import.meta.url).href;
 
 export function HomePage() {
   return (
     <section className="page-section home-page" aria-labelledby="hero-title">
       <div className="hero-console">
         <div className="reaper-frame" aria-label="Death Alliance Grim Reaper artwork">
-          <img src={heroImage} alt="Fictional Grim Reaper with scythe and white halo" />
+          <picture>
+            <source srcSet={reaperWebp} type="image/webp" />
+            <img src={heroImage} alt="Fictional Grim Reaper with scythe and white halo" />
+          </picture>
           <div className="scan-line" />
         </div>
 
